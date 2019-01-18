@@ -1,0 +1,51 @@
+﻿인터셉터는 jsp에서 컨트롤러로 가기 전, 컨트롤러에서 jsp에 가기 전에 정보를 가로챌 수 있다
+- 로그인 인터셉터의 역할은 로그인 시도 시 회원이면 회원의 정보를 낚아채 저장하는 역할을 한다
+
+
+1. src/main/java 에 패키지 생성
+- kr.green.spring.interceptor
+- 로그인 시도 시 실행할 interceptor 클래스 생성(loginInterceptor)
+- HandlerInterceptorAdapter 클래스의 상속 메소드로 바꾸고 임포트
+- public class loginInterceptor extends HandlerInterceptorAdapter{}
+================
+
+HandlerInterceptorAdapter 클래스를 상속 받은 LoginInterceptor 클래스 생성
+postHandle 메소드를 오버라이딩 함
+Controller에서 Model에 유저 정보를 저장하지 않았으면 modelMap.get("user")를 했을 때 null값이 들어가고
+있으면 저장한 정보를 가져온다. 가져온 정보가 null이 아니면 해당 유저 정보를 세션에 저장
+
+================
+	@Override
+	public void postHandle(
+	    HttpServletRequest request, 
+	    HttpServletResponse response, 
+	    Object handler, 
+	    ModelAndView modelAndView)
+	    throws Exception {
+	    AccountVo user = (AccountVo)modelAndView.getModelMap().get("user");//정보가 있으면 그 정보를 가져오고 없으면 null
+	    //"user"는 로그인 리퀘스트 컨트롤러에서 model.addAttribute("user",user)이다.
+	    // 즉 ${user}를 어디서나 쓸 수 있게 만든거다
+	    if(user != null) {
+	        request.getSession().setAttribute("user", user);
+	    }
+	}
+==================================
+2. servlet-context.xml에 interceptor로 등록
+
+
+<beans:bean id="loginInterceptor" class="kr.green.spring.interceptor.loginInterceptor"></beans:bean>
+<!-- 클래스는 인터셉터 패키지에 만든 클래스 명을 써야 한다. -->
+<interceptors>
+    <interceptor>
+        <mapping path="/"/><!-- 해당 주소로 들어오면 컨트롤러에 가기 전에 얘를 실행하겠다 -->
+        <beans:ref bean="loginInterceptor"/>
+    </interceptor>
+</interceptors>
+
+=================================
+
+
+이렇게 하면
+컨트롤러에서 addAttribute를 할 필요 없이
+세션정보(로그인 된 후 저장된 인터셉터 클래스의 변수 user)를 이용할 수 있게 된다
+ex))list.jsp에서 ${user.id}처럼 

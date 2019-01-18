@@ -1,0 +1,87 @@
+﻿비밀번호 암호화 저장
+
+1. pom.xml에 의존성 추가
+<!--스프링시큐리티 web 라이브러리-->
+<dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-web</artifactId>
+    <version>4.1.0.RELEASE</version>
+</dependency>
+  <!--스프링시큐리티 core 라이브러리-->
+<dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-core</artifactId>
+    <version>4.1.0.RELEASE</version>
+</dependency>
+  <!--스프링시큐리티 config 라이브러리-->
+<dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-config</artifactId>
+    <version>4.1.0.RELEASE</version>
+</dependency>
+
+==============================================
+2.spring-security.xml 생성
+root-context.xml이 있는 spring 폴더에 spring-security 로 xml생성
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <beans:bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />  
+</beans:beans>
+
+==============================================
+3. web.xml에 spring-security.xml를 등록
+/WEB-INF/spring/spring-security.xml	//를 추가한다.
+
+<!-- 수정전 web.xml-->
+<context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>
+        /WEB-INF/spring/root-context.xml
+    </param-value>
+</context-param>
+
+<!-- 수정후 web.xml-->
+<context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>
+        /WEB-INF/spring/root-context.xml
+        /WEB-INF/spring/spring-security.xml
+    </param-value>
+</context-param>
+
+=================================================
+서비스imp.java
+
+//회원가입 기능
+@Override
+//public boolean signup(String id, String pw, String email, String gender) {
+public boolean signup(AccountVo accountVo) {//boolean인 이유는 id가 있는지 없는지 판단하기 위해서
+	//가입여부 확인
+	//String id = accountVo.getId();
+	//AccountVo tmp = accountDao.getAccount(id);
+	AccountVo tmp = accountDao.getAccount(accountVo.getId());
+	if(tmp == null) {//db에서 검색된 id가 없으면
+		String encPw = passwordEncoder.encode(accountVo.getPw());
+		accountVo.setPw(encPw);
+		
+		accountVo.setAuthority("user");
+		accountDao.insertAccount(accountVo);
+		return true;
+	}
+	else
+		return false;
+}
+
+//로그인 기능
+@Override
+public AccountVo login(String id, String pw) {
+	AccountVo userInfo = accountDao.getAccount(id);//dao실행해서 id셀렉트문 일치하는거 가져와라
+	if(userInfo != null && passwordEncoder.matches(pw,userInfo.getPw())){//아이디가 있고 비번이 맞다면
+		return userInfo;//회원이면 정보를 던져줌
+	}
+	return null;//아니면 정보 없음
+}

@@ -1,0 +1,44 @@
+﻿src/main/java
+
+1. 기존 컨트롤러가 들어있는 패키지에 .controller 붙인다
+
+2. 새 패키지 3개 (.dao, .service, .vo) 생성
+
+3. src/main/resources 에 mappers패키지 생성(root-context에 mappers폴더라고 되어있으니까)
+
+4. service패키지에 service 인터페이스(AccountService), 구동부인 class(AccountServiceImp)를 만든다.
+4-1. 인터페이스에는 getAccount 메소드를 만든다.
+4-2. serviceImp에는 AccountService를 implements하면 자동으로 에러가 뜨면서 클릭하면 상속메소드를 만들어 준다.
+
+
+5. dao패키지에 AccountDao 인터페이스를 생성한다.
+- dao에 구동부 클래스가 없는 이유는 mapper.xml이 대신 해주기 때문이다.(mapper.xml이 sql을 호출한다)
+
+6. src/main/resources에 만들어 둔 mappers패키지에 xml파일을 만든다
+- AccountMapper.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.green.spring.dao.AccountDao">
+  <select id="getAccount" resultType="String">	<!-- id는 dao인터페이스에서 쓴 인터페이스 이름이다. -->
+    select email
+     from account
+      where id = #{id}
+  </select>
+</mapper>
+
+
+7. 컨트롤러.java에서
+@Autowired 어노테이션을 쓰고 service객체를 선언한다.
+
+8. 서비스 구동 클래스에 @Autowired 어노테이션을 쓰고 DAO 객체를 만든다
+@Autowired
+AccountDao accountDao;
+==================
+- src///spring/appSrvlet의 servlet-content.xml을 클릭
+맨 밑의 base-package를 최 상단으로 바꿔준다(모든것을 포함할 수 있게)
+
+- root-cotent.xml의
+맨 밑의 dao 경로를 dao패키지 경로로 바꿔준다
+<mybatis-spring:scan base-package="kr.green.spring.dao"/>

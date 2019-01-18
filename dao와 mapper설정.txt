@@ -1,0 +1,7 @@
+﻿root-context.xml에서 dao의 경로를 정하고
+<mybatis-spring:scan base-package="kr.green.spring.dao"/>
+
+
+mapper.xml의 namespace에서 어떤 dao파일과 연동할 것인지 정한다
+<mapper namespace="kr.green.spring.dao.AccountDao">
+
