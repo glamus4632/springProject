@@ -85,3 +85,13 @@ smartweb-spring/target/test-classes/log4j\.xml
 smartweb-spring/src/main/resources/log4j\.xml
 
 smartweb-spring/src/main/webapp/WEB-INF/spring/spring-security\.xml
+
+practice/src/main/resources/log4j\.xml
+
+practice/target/classes/log4j\.xml
+
+practice/target/test-classes/log4j\.xml
+
+Servers/Pivotal tc Server Developer Edition v4\.0-config/
+
+practice/src/test/resources/log4j\.xml

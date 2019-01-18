@@ -21,23 +21,8 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="kr.green.spring" /><!-- 모든 패키지가 선택될 수 있도록 -->
+	<context:component-scan base-package="kr.green.spring" />
 	
-	<beans:bean id="loginInterceptor" class="kr.green.spring.interceptor.loginInterceptor"></beans:bean>
-	<beans:bean id="unauthInterceptor" class="kr.green.spring.interceptor.UnauthInterceptor"></beans:bean>
-	<beans:bean id="authInterceptor" class="kr.green.spring.interceptor.AuthInterceptor"></beans:bean>
-	<interceptors>
-		<interceptor>
-			<mapping path="/"/><!-- 로그인 된 상태에서 다시 홈으로 가면 -->
-			<beans:ref bean="loginInterceptor"/>
-		</interceptor>
-		<interceptor>
-			<mapping path="/signup"/><!-- 회원가입으로(로그인상태) -->
-			<beans:ref bean="unauthInterceptor"/>
-		</interceptor>
-		<interceptor>
-			<mapping path="/bbs/*"/>
-			<beans:ref bean="authInterceptor"/>
-		</interceptor>
-	</interceptors>
+	
+	
 </beans:beans>

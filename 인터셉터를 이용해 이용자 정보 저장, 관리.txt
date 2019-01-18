@@ -1,0 +1,118 @@
+﻿이용자의 정보를 이용하여 무언가 동작을 바꾸거나 할때는 1번
+이용자 별 권한을 둬서(비회원,회원,관리자 등) 기능을 제한할 때는 2,3번
+
+
+컨트롤러 >>>
+
+@RequestMapping(value = "/", method = RequestMethod.POST)
+	public String homePost(String id, String pw, Model model) {
+		AccountVo user = accountService.login(id, pw);
+		
+		if(user != null) {
+			//System.out.println("로그인 성공");
+			model.addAttribute("user",user);
+			return "redirect:bbs/list";
+		}else{
+			//System.out.println("로그인 실패");
+			model.addAttribute("login",false);
+			return "redirect:/";
+			
+		}
+	}
+
+=============
+인터셉터 >>> 
+
+===1. 로그인 후 홈으로 갈 때 로그인form 지우기
+
+public class loginInterceptor extends HandlerInterceptorAdapter{
+	@Override
+	public void postHandle(
+	    HttpServletRequest request, 
+	    HttpServletResponse response, 
+	    Object handler, 
+	    ModelAndView modelAndView)
+	    throws Exception {
+	    //ModelMap modelMap = modelAndView.getModelMap();
+	    //AccountVo user = (AccountVo)modelMap.get("user");//정보가 있으면 그 정보를 가져오고 없으면 null
+		//한줄로
+		AccountVo user = (AccountVo)modelAndView.getModelMap().get("user");
+	    //"user"는 로그인 리퀘스트 컨트롤러에서 model.addAttribute("user",user)이다.
+	    // 즉 ${user}를 어디서나 쓸 수 있게 만든거다
+	    if(user != null) {
+	        //HttpSession session = request.getSession();//리퀘스트된 세션(정보)을 저장
+	        //session.setAttribute("user", user);
+	        //한줄로
+	    	request.getSession().setAttribute("user", user);//어트리뷰트 설정
+	    	//user가 vo타입이라서 .id, .email등의 사용이 가능해졌다
+	    }
+	}	
+	
+}
+
+home.jsp ======
+style="<c:if test="${user != null}">display:none;</c:if>" addAttribute가 user면 디스플레이 감춤
+
+========
+
+===2-1. 로그인 전 jsp에서 컨트롤러로 갈 정보를 인터셉트
+///로그인 하고 회원가입 페이지로 가려 할 경우
+
+public class UnauthInterceptor extends HandlerInterceptorAdapter{//authentication = 권한부여
+	@Override
+	public boolean preHandle(HttpServletRequest request, 
+	    HttpServletResponse response, Object handler)
+	    throws Exception {
+	    //HttpSession session = request.getSession();
+		//Object user = session.getAttribute("user");
+	    Object user = request.getSession().getAttribute("user");
+	    //로그인에 성공하면 컨트롤러에서 user가 add어트리뷰트가 된다
+	    //그래서 어트리뷰트에 user가 에드되어 있는지 판단
+	    if(user != null) {//유저 정보가 있으면
+	    	response.sendRedirect(request.getContextPath()+"/bbs/list");
+	    }
+	    return true;//정보가 없으면 원래 가려고 한 URI로 간다 return을 false로 하면 가긴 가는데 대신 동작을 안함
+	    //컨테이너까지 안가니까
+	}
+}
+=========
+
+2-2. 로그인 전 jsp에서 컨트롤러로 갈 정보를 인터셉트
+///
+public class AuthInterceptor extends HandlerInterceptorAdapter{
+	@Override
+	public boolean preHandle(HttpServletRequest request, 
+	    HttpServletResponse response, Object handler)
+	    throws Exception {
+	    //HttpSession session = request.getSession();
+		//Object user = session.getAttribute("user");
+	    Object user = request.getSession().getAttribute("user");//로그인에 실패하면 null
+	    if(user == null) {//유저 정보가 없으면(로그인 안했으면)
+	    	response.sendRedirect(request.getContextPath()+"/");//그냥 홈으로 가!
+	    }
+	    return true;//가던 곳으로 가십쇼(컨트롤러 까지 갑니다)
+	}
+}
+
+
+
+===============
+servlet-context.xml
+
+	<beans:bean id="loginInterceptor" class="kr.green.spring.interceptor.loginInterceptor"></beans:bean>
+	<beans:bean id="unauthInterceptor" class="kr.green.spring.interceptor.UnauthInterceptor"></beans:bean>
+	<beans:bean id="authInterceptor" class="kr.green.spring.interceptor.AuthInterceptor"></beans:bean>
+	<interceptors>
+		<interceptor>
+			<mapping path="/"/><!-- 로그인 된 상태에서 다시 홈으로 가면 -->
+			<beans:ref bean="loginInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/signup"/><!-- 회원가입으로(로그인상태) -->
+			<beans:ref bean="unauthInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/bbs/*"/>
+			<beans:ref bean="authInterceptor"/>
+		</interceptor>
+	</interceptors>
