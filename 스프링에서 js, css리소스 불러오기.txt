@@ -1,0 +1,7 @@
+﻿webapp -> resources폴더에 소스들을 넣고
+
+servlet-context.xml에 경로를 추가하면 된다
+<resources mapping="/resources/**" location="/resources/" />
+
+
+<resources mapping="/img/**" location="/img/" />
