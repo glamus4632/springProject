@@ -7,6 +7,9 @@
 <title>회원가입</title>
 </head>
 <body>
+<div class="container">
+
+</div>
 <form action="<%= request.getContextPath() %>/signup" method="post">
 ID: <input type="text" name="id"><br>
 PW: <input type="password" name="pw"><br>

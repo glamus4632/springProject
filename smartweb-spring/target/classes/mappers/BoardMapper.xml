@@ -11,4 +11,10 @@
 	  VALUES (#{boardVo.title},#{boardVo.content},#{boardVo.writer})
  </insert>
   
+  <select id="getBoards" resultType="kr.green.spring.vo.BoardVo">
+  	select *
+  	  from board
+		order by id desc<!-- 큰 숫자부터(내림차순 desc) -->
+  </select>
+   
 </mapper>
