@@ -1,4 +1,5 @@
-﻿비밀번호 암호화 저장
+﻿비밀번호 암호화 저장 (pom.xml -> spring-security.xml생성 -> web.xml에 security등록
+ -> 서비스Imp에서 passwordEncoder.encode()=인코딩, passwordEncoder.matches()=매치되는지 확인)
 
 1. pom.xml에 의존성 추가
 <!--스프링시큐리티 web 라이브러리-->
