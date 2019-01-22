@@ -95,3 +95,11 @@ practice/target/test-classes/log4j\.xml
 Servers/Pivotal tc Server Developer Edition v4\.0-config/
 
 practice/src/test/resources/log4j\.xml
+
+test/src/test/resources/log4j\.xml
+
+test/target/classes/log4j\.xml
+
+test/target/test-classes/log4j\.xml
+
+test/src/main/resources/log4j\.xml

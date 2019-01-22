@@ -1,0 +1,15 @@
+﻿<interceptor>
+	<mapping path="/"/><!-- 로그인 된 상태에서 다시 홈으로 가면 -->
+		<beans:ref bean="loginInterceptor"/>
+	</interceptor>
+	<interceptor>
+		<mapping path="/signup"/><!-- 회원가입으로(로그인상태) -->
+		<beans:ref bean="unauthInterceptor"/>
+	</interceptor>
+	<interceptor>
+		<mapping path="/bbs/*"/>
+		<beans:ref bean="authInterceptor"/>
+</interceptor>
+
+이렇게 <mapping path="/bbs/*"/> 경로를 설정하였으면 bbs아래의 모두 가버리니까
+주의를 해야 한다.

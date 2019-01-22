@@ -9,6 +9,7 @@
 4. service패키지에 service 인터페이스(AccountService), 구동부인 class(AccountServiceImp)를 만든다.
 4-1. 인터페이스에는 getAccount 메소드를 만든다.
 4-2. serviceImp에는 AccountService를 implements하면 자동으로 에러가 뜨면서 클릭하면 상속메소드를 만들어 준다.
+============== @Service 어노테이션으로 서비스라고 명시해야 한다
 
 
 5. dao패키지에 AccountDao 인터페이스를 생성한다.
@@ -37,7 +38,7 @@
 AccountDao accountDao;
 ==================
 - src///spring/appSrvlet의 servlet-content.xml을 클릭
-맨 밑의 base-package를 최 상단으로 바꿔준다(모든것을 포함할 수 있게)
+<context:component-scan base-package= 를 최 상단으로 바꿔준다(모든것을 포함할 수 있게)
 
 - root-cotent.xml의
 맨 밑의 dao 경로를 dao패키지 경로로 바꿔준다

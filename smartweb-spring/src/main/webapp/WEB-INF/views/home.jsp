@@ -4,23 +4,25 @@
 
 <html>
 <head>
-	<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
 	<title>Home</title>
+	<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+	<link rel="stylesheet" href="<%= request.getContextPath() %>/resources/css/bootstrap.css">
 </head>
 <body>
 <h1>
 	Login!  
 </h1>
+<!-- <P>  The time on the server is ${serverTime}. -->
+<%-- ${serverTime1}처럼 없는 변수를 적으면 에러가 안나고 동작도 안한다 --%>
 
-<P>  The time on the server is ${serverTime}. </P><%-- ${serverTime1}처럼 없는 변수를 적으면 에러가 안나고 동작도 안한다 --%>
 <form action="<%= request.getContextPath() %>/" method="POST"
   style="<c:if test="${user != null}">display:none;</c:if>">
 	<input type="text" name="id" id="id"><br>
 	<input type="password" name="pw" id="pw"><br>
-	<button type="submit">log-in</button>
+	<button type="submit" class="btn btn-primary">log-in</button>
 </form>
 <a href="<%= request.getContextPath() %>/signup"
-style="<c:if test="${user != null}">display:none;</c:if>">회원가입 페이지로 이동</a>
+style="<c:if test="${user != null}">display:none;</c:if>">회원가입 페이지로 이동</a><br>
 
 <script>
 $(document).ready(function(){

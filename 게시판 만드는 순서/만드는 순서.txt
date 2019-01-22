@@ -1,0 +1,27 @@
+1. 서비스에 BoardService 인터페이스 생성
+
+2. BoardServiceImp 클래스 생성, 임플리먼츠 후 @Service 어노테이션 추가
+
+3. BoardDao 인터페이스 생성
+
+4. mappers에서 <mapper namespace="kr.green.spring.dao.BoardDao"> 로 수정 (account꺼 복붙해서 고치면 편함)
+
+5. BoardVo 클래스 생성, db변수 등록, 게터-세터, toString생성
+
+6. 컨트롤러에서
+@Autowired	//객체생성 시 null대신 객체를 만들어주는 역할 new BoardService
+BoardService boardService;
+서비스로 name객체들의 값을 넘김
+
+7. 서비스 인터페이스에 인터페이스 생성
+서비스Imp에서
+@Autowired
+BoardDao boardDao 객체 생성
+Dao로 데이터를 넘김
+
+8.Dao서 인터페이스 구현, 매퍼로 넘길 데이터 매개변수로 입력
+- insertBoard(@Param("boardVo")BoardVo boardVo); 여기서 ("")안에 있는 것이 mapper에서 쓸 객체명이다
+
+9. mapper에서 Dao에서 쓴 이름을 id로 하여 insert문 작성
+INSERT INTO board (title, content, writer)
+values (#{boardVo.title},#{boardVo.content},#{boardVo.writer})

@@ -28,7 +28,7 @@ public class HomeController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String homeGet(Model model, Boolean signup, Boolean login) {
 		Date date = new Date();
-		System.out.print(login);
+		//System.out.print(login);
 		model.addAttribute("signup",signup);//아래에서 true가 담긴 signup을 멤버변수로 받아 사용함
 		model.addAttribute("login",login);
 		return "home";//home.jsp
@@ -36,7 +36,7 @@ public class HomeController {
 	//로그인 리퀘스트
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public String homePost(String id, String pw, Model model) {
-		AccountVo user = accountService.login(id, pw);
+		AccountVo user = accountService.login(id, pw);//id검색과 로그인 되었는지 확인
 		
 		if(user != null) {
 			//System.out.println("로그인 성공");
@@ -70,4 +70,5 @@ public class HomeController {
 			return "redirect:/signup";
 		}
 	}
+
 }

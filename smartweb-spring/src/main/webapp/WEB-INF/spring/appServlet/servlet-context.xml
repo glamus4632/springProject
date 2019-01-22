@@ -14,7 +14,7 @@
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
-
+	<resources mapping="/img/**" location="/resources/img" />
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<beans:property name="prefix" value="/WEB-INF/views/" />
@@ -36,7 +36,7 @@
 			<beans:ref bean="unauthInterceptor"/>
 		</interceptor>
 		<interceptor>
-			<mapping path="/bbs/*"/>
+			<mapping path="/bbs/*"/><!-- bbs로 들어오는 애들 모두 인터셉트 -->
 			<beans:ref bean="authInterceptor"/>
 		</interceptor>
 	</interceptors>

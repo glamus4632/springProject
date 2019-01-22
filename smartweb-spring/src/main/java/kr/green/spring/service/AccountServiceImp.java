@@ -48,7 +48,7 @@ public class AccountServiceImp implements AccountService{
 	public AccountVo login(String id, String pw) {
 		AccountVo userInfo = accountDao.getAccount(id);//dao실행해서 id셀렉트문 일치하는거 가져와라
 		if(userInfo != null && passwordEncoder.matches(pw,userInfo.getPw())){//아이디가 있고 비번이 맞다면
-			return userInfo;//회원이면 정보를 던져줌
+			return userInfo;//회원이면 정보를 던져줌(id명)
 		}
 		return null;//아니면 정보 없음
 	}

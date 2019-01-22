@@ -1,0 +1,6 @@
+id = 게시판 생성시 자동번호 오토 인크리먼트 AI 체크
+title
+content = longtext 길이제한 없게함
+writer = 유저id니까 account의 id와 길이가 같게 varchar(45)
+registerd_date = datetime 디폴트는 now()
+state = 게시글 삭제용 컬럼(d는 삭제 I(i)는 보임)

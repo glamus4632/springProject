@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-
+//로그인하지 않고 list페이지에 접근하는 것을 막음
 public class UnauthInterceptor extends HandlerInterceptorAdapter{//authentication = 권한부여
 	@Override
 	public boolean preHandle(HttpServletRequest request, 

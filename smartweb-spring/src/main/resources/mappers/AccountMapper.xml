@@ -19,6 +19,7 @@
 	  insert into account (id, pw, email, gender, authority)
 	  <!-- dao의 파라미터에 @Param을 붙혔을 경우 -->
 	  values (#{accountVo.id},#{accountVo.pw},#{accountVo.email},#{accountVo.gender},#{accountVo.authority})
+	  <!-- values(#{String.id}, 처럼 씀) -->
  </insert>
   
 </mapper>
